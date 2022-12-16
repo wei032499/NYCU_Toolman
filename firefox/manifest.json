@@ -1,0 +1,24 @@
+{
+    "description": "方便填工作日誌的小工具",
+    "manifest_version": 3,
+    "name": "打工人 NYCU Toolman",
+    "version": "1.0.0",
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "{b898bf67-e0ae-41e9-aeb7-86630b67359c}"
+        }
+    },
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "scripting"
+    ],
+    "host_permissions": [
+        "https://pt-attendance.nycu.edu.tw/"
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    }
+}
