@@ -7,7 +7,7 @@ function blockWorkDetailPage() {
 browser.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         if (request.func === "blockWorkDetailPage")
-            browser.webRequest.onBeforeRequest.addListener(blockWorkDetailPage, { urls: ["*://pt-attendance.nycu.edu.tw/workDetail.php*"], tabId: sender.tab.id }, ["blocking"]);
+            browser.webRequest.onBeforeRequest.addListener(blockWorkDetailPage, { urls: ["https://pt-attendance.nycu.edu.tw/workDetail.php*"], tabId: sender.tab.id }, ["blocking"]);
         else if (request.func === "releaseWorkDetailPage")
             browser.webRequest.onBeforeRequest.removeListener(blockWorkDetailPage);
         sendResponse({});
@@ -20,7 +20,7 @@ browser.webRequest.onCompleted.addListener(
         target: { tabId: details.tabId },
         files: ['worklist.js', 'workLogAutoFill.js']
     }),
-    { urls: ["*://pt-attendance.nycu.edu.tw/index.php*"] }
+    { urls: ["https://pt-attendance.nycu.edu.tw/index.php*"] }
 );
 
 
@@ -34,7 +34,7 @@ browser.webRequest.onCompleted.addListener(
             addAutoFillForm();
         }
     }),
-    { urls: ["*://pt-attendance.nycu.edu.tw/index.php*"] }
+    { urls: ["https://pt-attendance.nycu.edu.tw/index.php*"] }
 );
 
 browser.webRequest.onCompleted.addListener(
@@ -45,7 +45,7 @@ browser.webRequest.onCompleted.addListener(
             initAutoFillForm();
         }
     }),
-    { urls: ["*://pt-attendance.nycu.edu.tw/workDetail.php*"] }
+    { urls: ["https://pt-attendance.nycu.edu.tw/workDetail.php*"] }
 );
 
 browser.webRequest.onCompleted.addListener(
@@ -53,7 +53,7 @@ browser.webRequest.onCompleted.addListener(
         target: { tabId: details.tabId },
         func: () => { workDetail(); }
     }),
-    { urls: ["*://pt-attendance.nycu.edu.tw/workDetail.php*"] }
+    { urls: ["https://pt-attendance.nycu.edu.tw/workDetail.php*"] }
 );
 
 browser.webRequest.onCompleted.addListener(
@@ -61,7 +61,7 @@ browser.webRequest.onCompleted.addListener(
         target: { tabId: details.tabId },
         func: () => { workingList(); }
     }),
-    { urls: ["*://pt-attendance.nycu.edu.tw/workingList.php*"] }
+    { urls: ["https://pt-attendance.nycu.edu.tw/workingList.php*"] }
 );
 
 browser.webRequest.onCompleted.addListener(
@@ -69,7 +69,7 @@ browser.webRequest.onCompleted.addListener(
         target: { tabId: details.tabId },
         func: () => { bymonth(); }
     }),
-    { urls: ["*://pt-attendance.nycu.edu.tw/bymonth.php*"] }
+    { urls: ["https://pt-attendance.nycu.edu.tw/bymonth.php*"] }
 );
 
 browser.webRequest.onCompleted.addListener(
@@ -82,5 +82,5 @@ browser.webRequest.onCompleted.addListener(
             })
         }
     },
-    { urls: ["*://pt-attendance.nycu.edu.tw/*.php*"] }
+    { urls: ["https://pt-attendance.nycu.edu.tw/*.php*"] }
 );

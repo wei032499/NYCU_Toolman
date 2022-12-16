@@ -1,5 +1,5 @@
 function modifyWorkList(btn) {
-    btn.innerHTML = (window.showExpired !== false) ? "hide expired" : "show expired";
+    btn.textContent = (window.showExpired !== false) ? "hide expired" : "show expired";
 
     if (window.showExpired !== false) btn.workList.forEach((work) => work.style.display = '');
     else btn.workList.forEach((work) => { if (btn.compare(work)) work.style.display = 'none' });
@@ -8,7 +8,7 @@ function modifyWorkList(btn) {
 function addExpiredBtn(workList, pos, compare) {
 
     const btn = document.createElement("button");
-    btn.innerHTML = (window.showExpired !== false) ? "hide expired" : "show expired";
+    btn.textContent = (window.showExpired !== false) ? "hide expired" : "show expired";
     btn.type = "button";
     btn.className = "expiredBtn";
 
@@ -29,7 +29,7 @@ function addExpiredBtn(workList, pos, compare) {
 
 
 
-function workLists() {
+function addWorklistButtons() {
     const workList = document.querySelectorAll("#showWorkLists tbody tr");
     const pos = { targ: document.querySelector("#showWorkLists h1"), rel: "afterend" };
     const compare = function (tr) {
@@ -95,5 +95,3 @@ function workingList() {
     addExpiredBtn(workList, pos, compare);
 }
 
-
-workLists();
