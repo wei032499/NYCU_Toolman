@@ -43,7 +43,7 @@ chrome.webRequest.onCompleted.addListener(
             }
         });
     }),
-    { urls: ["https://pt-attendance.nycu.edu.tw/index.php*"] }
+    { urls: ["https://pt-attendance.nycu.edu.tw/", "https://pt-attendance.nycu.edu.tw/?*", "https://pt-attendance.nycu.edu.tw/index.php*"] }
 );
 
 
