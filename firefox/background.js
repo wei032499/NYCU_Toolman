@@ -1,15 +1,23 @@
 
-function blockWorkDetailPage() {
+function blockWorkDetailPageListener() {
     return { cancel: true };
+}
+
+function blockWorkDetailPage(tabId) {
+    browser.webRequest.onBeforeRequest.addListener(blockWorkDetailPage, { urls: ["https://pt-attendance.nycu.edu.tw/workDetail.php*"], tabId: tabId }, ["blocking"]);
+}
+
+function removeBlockWorkDetailPage() {
+    browser.webRequest.onBeforeRequest.removeListener(blockWorkDetailPage);
 }
 
 
 browser.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         if (request.func === "blockWorkDetailPage")
-            browser.webRequest.onBeforeRequest.addListener(blockWorkDetailPage, { urls: ["https://pt-attendance.nycu.edu.tw/workDetail.php*"], tabId: sender.tab.id }, ["blocking"]);
+            blockWorkDetailPage(sender.tab.id);
         else if (request.func === "releaseWorkDetailPage")
-            browser.webRequest.onBeforeRequest.removeListener(blockWorkDetailPage);
+            removeBlockWorkDetailPage();
         sendResponse({});
     }
 );
@@ -19,20 +27,14 @@ browser.webRequest.onCompleted.addListener(
     (details) => browser.scripting.executeScript({
         target: { tabId: details.tabId },
         files: ['worklist.js', 'workLogAutoFill.js']
-    }),
-    { urls: ["https://pt-attendance.nycu.edu.tw/index.php*"] }
-);
-
-
-
-
-browser.webRequest.onCompleted.addListener(
-    (details) => browser.scripting.executeScript({
-        target: { tabId: details.tabId },
-        func: () => {
-            addWorklistButtons();
-            addAutoFillForm();
-        }
+    }, () => {
+        browser.scripting.executeScript({
+            target: { tabId: details.tabId },
+            func: () => {
+                addWorklistButtons();
+                addAutoFillForm();
+            }
+        });
     }),
     { urls: ["https://pt-attendance.nycu.edu.tw/index.php*"] }
 );
@@ -75,10 +77,10 @@ browser.webRequest.onCompleted.addListener(
 browser.webRequest.onCompleted.addListener(
     (details) => {
         if (details.url.indexOf("://pt-attendance.nycu.edu.tw/workDetail.php") === -1 && details.url.indexOf("://pt-attendance.nycu.edu.tw/ajaxfunction.php") === -1) {
-            browser.webRequest.onBeforeRequest.removeListener(blockWorkDetailPage);
+            removeBlockWorkDetailPage();
             browser.scripting.executeScript({
                 target: { tabId: details.tabId },
-                func: () => { document.getElementById("ext_form").style.display = 'none'; }
+                func: () => { try { document.getElementById("ext_form").style.display = 'none'; } catch (e) { } }
             })
         }
     },
