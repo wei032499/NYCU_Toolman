@@ -14,13 +14,17 @@ function blockWorkDetailPage(tabId) {
     }, () => { });
 }
 
+function removeBlockWorkDetailPage(tabId) {
+    chrome.declarativeNetRequest.updateSessionRules({ removeRuleIds: [tabId] });
+}
+
 
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         if (request.func === "blockWorkDetailPage")
             blockWorkDetailPage(sender.tab.id);
         else if (request.func === "releaseWorkDetailPage")
-            chrome.declarativeNetRequest.updateSessionRules({ removeRuleIds: [sender.tab.id] });
+            removeBlockWorkDetailPage(sender.tab.id);
         sendResponse({});
     }
 );
@@ -81,10 +85,10 @@ chrome.webRequest.onCompleted.addListener(
 chrome.webRequest.onCompleted.addListener(
     (details) => {
         if (details.url.indexOf("://pt-attendance.nycu.edu.tw/workDetail.php") === -1 && details.url.indexOf("://pt-attendance.nycu.edu.tw/ajaxfunction.php") === -1) {
-            chrome.webRequest.onBeforeRequest.removeListener(blockWorkDetailPage);
+            removeBlockWorkDetailPage(details.tabId);
             chrome.scripting.executeScript({
                 target: { tabId: details.tabId },
-                func: () => { document.getElementById("ext_form").style.display = 'none'; }
+                func: () => { try { document.getElementById("ext_form").style.display = 'none'; } catch (e) { } }
             })
         }
     },

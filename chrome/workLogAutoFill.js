@@ -35,6 +35,7 @@ async function addRecords(pno, times) {
         workEE.value = times[i][1];
         pnoE.dispatchEvent(new Event("change"));
         await new Promise(r => setTimeout(r, 300));
+        submitE.disabled = false;
         submitE.click();
     }
 
@@ -47,16 +48,19 @@ async function addRecords(pno, times) {
 
 
 
-function getDateList(day) {
+function getDateList(startDate, endDate, day) {
     const now = new Date();
-    const firstDayM = new Date(now.getFullYear() + "-" + (now.getMonth() + 1) + "-01");
-    const lastDayM = new Date(now.getFullYear(), (now.getMonth() + 1), 0);
-    let diff = parseInt(day) - firstDayM.getDay();
+    const firstDateM = new Date(now.getFullYear() + "-" + (now.getMonth() + 1) + "-01");
+    const firstDate = startDate.getTime() < firstDateM.getTime() ? firstDateM : startDate;
+    const lastDate = endDate.getTime() < now.getTime() ? endDate : now;
+
+    // const lastDayM = new Date(now.getFullYear(), (now.getMonth() + 1), 0);
+    let diff = parseInt(day) - firstDate.getDay();
     if (diff < 0) diff += 7;
 
     const dateList = [];
-    for (let i = 1 + diff; i <= lastDayM.getDate(); i += 7) {
-        dateList.push(now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + i.toString().padStart(2, '0'));
+    for (let i = firstDate.getDate() + diff; i <= lastDate.getDate(); i += 7) {
+        dateList.push(firstDate.getFullYear() + "-" + (firstDate.getMonth() + 1) + "-" + i.toString().padStart(2, '0'));
     }
 
     return dateList;
@@ -117,13 +121,16 @@ function addAutoFillForm() {
 
     ext_form.addEventListener('submit', function (event) {
         event.preventDefault();
-        const pno = document.getElementById("ext_pno").value;
+        const pnoE = document.getElementById("ext_pno");
+        const projectText = pnoE.options[pnoE.selectedIndex].text;
+        const [startDate, endDate] = projectText.split(/\s/)[1].split("~");
+        const pno = pnoE.value;
         const day = document.getElementById("ext_day").value;
         const startT = document.getElementById("ext_startT").value;
         const startTS = startT.split(":");
         const period = document.getElementById("ext_period").value;
 
-        const dateList = getDateList(day);
+        const dateList = getDateList(new Date(startDate), new Date(endDate), day);
         const times = [];
         dateList.forEach(function (date) {
             const start = date + " " + startT;
