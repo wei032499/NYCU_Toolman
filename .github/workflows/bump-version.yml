@@ -35,15 +35,13 @@ jobs:
           updateXmlCodebaseUrl: 'https://github.com/wei032499/NYCU_Toolman/releases/download/${{ steps.tag_version.outputs.new_tag }}/chrome-${{ steps.tag_version.outputs.new_tag }}.crx'
       - name: Create firefox_update.json
         run: |
-          sed -i 's/"id":\s*".*"/"id": "{4914285e-14fc-4dd7-865f-a49a08d18364}"/g' firefox/manifest.json
-          zip -j -r firefox-beta.zip firefox
-          echo '{"addons": {"{4914285e-14fc-4dd7-865f-a49a08d18364}": {"updates": [{"version": "${{ steps.tag_version.outputs.new_version }}", "update_link": "https://github.com/wei032499/NYCU_Toolman/releases/download/${{ steps.tag_version.outputs.new_tag }}/firefox-${{ steps.tag_version.outputs.new_tag }}.xpi"}]}}}' > firefox_update.json
+          echo '{"addons": {"{b898bf67-e0ae-41e9-aeb7-86630b67359c}": {"updates": [{"version": "${{ steps.tag_version.outputs.new_version }}", "update_link": "https://github.com/wei032499/NYCU_Toolman/releases/download/${{ steps.tag_version.outputs.new_tag }}/firefox-${{ steps.tag_version.outputs.new_tag }}.xpi"}]}}}' > firefox_update.json
       - name: Sign Firefox xpi file
         uses: cardinalby/webext-buildtools-firefox-sign-xpi-action@1.0.6
         with:
-          zipFilePath: 'firefox-beta.zip'
+          zipFilePath: 'firefox-latest.zip'
           xpiFilePath: 'firefox-${{ steps.tag_version.outputs.new_tag }}.xpi'
-          extensionId: '{4914285e-14fc-4dd7-865f-a49a08d18364}'
+          extensionId: '{b898bf67-e0ae-41e9-aeb7-86630b67359c}'
           jwtIssuer: ${{ secrets.FF_JWT_ISSUER }}
           jwtSecret: ${{ secrets.FF_JWT_SECRET }}
       - name: Create a GitHub release
