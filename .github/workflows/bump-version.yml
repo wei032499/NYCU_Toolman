@@ -36,22 +36,12 @@ jobs:
       - name: Create firefox_update.json
         run: |
           echo '{"addons": {"{b898bf67-e0ae-41e9-aeb7-86630b67359c}": {"updates": [{"version": "${{ steps.tag_version.outputs.new_version }}", "update_link": "https://github.com/wei032499/NYCU_Toolman/releases/download/${{ steps.tag_version.outputs.new_tag }}/firefox-${{ steps.tag_version.outputs.new_tag }}.xpi"}]}}}' > firefox_update.json
-      - name: Sign Firefox xpi file
-        uses: cardinalby/webext-buildtools-firefox-sign-xpi-action@1.0.6
-        with:
-          zipFilePath: 'firefox-latest.zip'
-          xpiFilePath: 'firefox-${{ steps.tag_version.outputs.new_tag }}.xpi'
-          extensionId: '{b898bf67-e0ae-41e9-aeb7-86630b67359c}'
-          channel: 'unlisted'
-          timeoutMs: 600000
-          jwtIssuer: ${{ secrets.FF_JWT_ISSUER }}
-          jwtSecret: ${{ secrets.FF_JWT_SECRET }}
+      
       - name: Add & Commit
         uses: EndBug/add-and-commit@v9.1.1
         with:
           new_branch: 'latest'
-          add: 'chrome-latest.zip firefox-latest.zip chrome_update.xml firefox_update.json'
-          commit: '--force'
+          add: 'chrome-latest.zip firefox-latest.zip chrome_update.xml firefox_update.json --force'
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1.12.0
         with:
