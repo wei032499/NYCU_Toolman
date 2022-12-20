@@ -37,10 +37,12 @@ jobs:
         run: |
           echo '{"addons": {"{b898bf67-e0ae-41e9-aeb7-86630b67359c}": {"updates": [{"version": "${{ steps.tag_version.outputs.new_version }}", "update_link": "https://github.com/wei032499/NYCU_Toolman/releases/download/${{ steps.tag_version.outputs.new_tag }}/firefox-${{ steps.tag_version.outputs.new_tag }}.xpi"}]}}}' > firefox_update.json
       
+      - uses: actions/checkout@v3
+        with:
+          ref: 'latest'
       - name: Add & Commit
         uses: EndBug/add-and-commit@v9.1.1
         with:
-          ref: 'latest'
           add: 'chrome-latest.zip firefox-latest.zip chrome_update.xml firefox_update.json --force'
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1.12.0
