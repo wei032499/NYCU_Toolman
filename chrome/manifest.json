@@ -2,6 +2,7 @@
     "description": "方便填工作日誌的小工具",
     "manifest_version": 3,
     "name": "打工人 NYCU Toolman",
+    "update_url": "https://github.com/wei032499/NYCU_Toolman/releases/latest/download/chrome_update.xml",
     "version": "",
     "permissions": [
         "webRequest",
