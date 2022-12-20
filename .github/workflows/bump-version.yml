@@ -15,8 +15,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Zip Folder
         run: |
-          zip -r chrome-${{ steps.tag_version.outputs.new_tag }}.zip "chrome/*"
-          zip -r firefox-${{ steps.tag_version.outputs.new_tag }}.zip "firefox/*"
+          zip -j -r chrome-${{ steps.tag_version.outputs.new_tag }}.zip chrome
+          zip -j -r firefox-${{ steps.tag_version.outputs.new_tag }}.zip firefox
           cp chrome-${{ steps.tag_version.outputs.new_tag }}.zip chrome-latest.zip
           cp firefox-${{ steps.tag_version.outputs.new_tag }}.zip firefox-latest.zip
       - name: Create a GitHub release
