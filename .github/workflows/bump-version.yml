@@ -40,8 +40,8 @@ jobs:
           ref: 'latest'
           clean: 'false'
       - run: |
-          cp chrome-${{ steps.tag_version.outputs.new_tag }}.zip latest/chrome-latest.zip
-          cp firefox-${{ steps.tag_version.outputs.new_tag }}.zip latest/firefox-latest.zip
+          cp chrome-${{ steps.tag_version.outputs.new_tag }}.zip chrome-latest.zip
+          cp firefox-${{ steps.tag_version.outputs.new_tag }}.zip firefox-latest.zip
       - name: Add & Commit
         uses: EndBug/add-and-commit@v9.1.1
         with:
