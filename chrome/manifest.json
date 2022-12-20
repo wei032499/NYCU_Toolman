@@ -2,7 +2,7 @@
     "description": "方便填工作日誌的小工具",
     "manifest_version": 3,
     "name": "打工人 NYCU Toolman",
-    "version": "1.0.1",
+    "version": "",
     "permissions": [
         "webRequest",
         "declarativeNetRequest",
