@@ -40,6 +40,7 @@ jobs:
           xpiFilePath: 'firefox-${{ steps.tag_version.outputs.new_tag }}.xpi'
           jwtIssuer: ${{ secrets.FF_JWT_ISSUER }}
           jwtSecret: ${{ secrets.FF_JWT_SECRET }}
+      - name: Create firefox_update.json
         run: |
           echo '{"addons": {"{b898bf67-e0ae-41e9-aeb7-86630b67359c}": {"updates": [{"version": "${{ steps.tag_version.outputs.new_version }}", "update_link": "https://github.com/wei032499/NYCU_Toolman/releases/download/${{ steps.tag_version.outputs.new_tag }}/firefox-${{ steps.tag_version.outputs.new_tag }}.xpi"}]}}}' > firefox_update.json
       - name: Create a GitHub release
