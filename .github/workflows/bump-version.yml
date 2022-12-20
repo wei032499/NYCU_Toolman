@@ -15,8 +15,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Update version in manifest
         run: |
-          sed -i 's/"version":\s*".*"/"version": "{{ steps.tag_version.outputs.new_tag }}"/g' chrome/manifest.json
-          sed -i 's/"version":\s*".*"/"version": "{{ steps.tag_version.outputs.new_tag }}"/g' firefox/manifest.json
+          sed -i 's/"version":\s*".*"/"version": "${{ steps.tag_version.outputs.new_tag }}"/g' chrome/manifest.json
+          sed -i 's/"version":\s*".*"/"version": "${{ steps.tag_version.outputs.new_tag }}"/g' firefox/manifest.json
       - name: Zip Folder
         run: |
           zip -j -r chrome-${{ steps.tag_version.outputs.new_tag }}.zip chrome
