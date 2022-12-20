@@ -51,6 +51,7 @@ jobs:
         with:
           new_branch: 'latest'
           add: 'chrome-latest.zip firefox-latest.zip chrome_update.xml firefox_update.json'
+          commit: '--force'
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1.12.0
         with:
