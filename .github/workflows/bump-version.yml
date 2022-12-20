@@ -15,12 +15,14 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Zip Folder
         run: |
-          zip -r chrome-${{ steps.tag_version.outputs.new_tag }}.zip chrome
-          zip -r firefox-${{ steps.tag_version.outputs.new_tag }}.zip firefox
+          zip -r chrome-${{ steps.tag_version.outputs.new_tag }}.zip "chrome/*"
+          zip -r firefox-${{ steps.tag_version.outputs.new_tag }}.zip "firefox/*"
+          cp chrome-${{ steps.tag_version.outputs.new_tag }}.zip chrome-latest.zip
+          cp firefox-${{ steps.tag_version.outputs.new_tag }}.zip firefox-latest.zip
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1.12.0
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
-          artifacts: "chrome-${{ steps.tag_version.outputs.new_tag }}.zip,firefox-${{ steps.tag_version.outputs.new_tag }}.zip"
+          artifacts: "chrome-${{ steps.tag_version.outputs.new_tag }}.zip,firefox-${{ steps.tag_version.outputs.new_tag }}.zip,chrome-latest.zip,firefox-latest.zip"
