@@ -43,6 +43,7 @@ jobs:
           xpiFilePath: 'firefox-${{ steps.tag_version.outputs.new_tag }}.xpi'
           extensionId: '{b898bf67-e0ae-41e9-aeb7-86630b67359c}'
           channel: 'unlisted'
+          timeoutMs: 600000
           jwtIssuer: ${{ secrets.FF_JWT_ISSUER }}
           jwtSecret: ${{ secrets.FF_JWT_SECRET }}
       - name: Create a GitHub release
