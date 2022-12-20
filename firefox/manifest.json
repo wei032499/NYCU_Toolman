@@ -5,7 +5,8 @@
     "version": "",
     "browser_specific_settings": {
         "gecko": {
-            "id": "{b898bf67-e0ae-41e9-aeb7-86630b67359c}"
+            "id": "{b898bf67-e0ae-41e9-aeb7-86630b67359c}",
+            "update_url": "https://github.com/wei032499/NYCU_Toolman/releases/latest/download/firefox_update.json"
         }
     },
     "permissions": [
