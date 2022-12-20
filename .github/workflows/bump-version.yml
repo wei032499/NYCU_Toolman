@@ -20,9 +20,7 @@ jobs:
       - name: Zip Folder
         run: |
           zip -j -r chrome-${{ steps.tag_version.outputs.new_tag }}.zip chrome
-          zip -j -r firefox-${{ steps.tag_version.outputs.new_tag }}.zip firefox
-          cp chrome-${{ steps.tag_version.outputs.new_tag }}.zip chrome-latest.zip
-          cp firefox-${{ steps.tag_version.outputs.new_tag }}.zip firefox-latest.zip
+          zip -j -r firefox-${{ steps.tag_version.outputs.new_tag }}.zip firefox          
       - name: Sign Chrome Extension crx file
         uses: cardinalby/webext-buildtools-chrome-crx-action@2.0.3
         with:
@@ -41,6 +39,9 @@ jobs:
         with:
           ref: 'latest'
           path: 'latest'
+      - run: |
+          cp chrome-${{ steps.tag_version.outputs.new_tag }}.zip latest/chrome-latest.zip
+          cp firefox-${{ steps.tag_version.outputs.new_tag }}.zip latest/firefox-latest.zip
       - name: Add & Commit
         uses: EndBug/add-and-commit@v9.1.1
         with:
