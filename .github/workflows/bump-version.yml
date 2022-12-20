@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.1
@@ -15,8 +15,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Zip Folder
         run: |
-          zip chrome-${{ steps.tag_version.outputs.new_tag }}.zip "chrome/*"
-          zip firefox-${{ steps.tag_version.outputs.new_tag }}.zip "firefox/*"
+          zip -r chrome-${{ steps.tag_version.outputs.new_tag }}.zip chrome
+          zip -r firefox-${{ steps.tag_version.outputs.new_tag }}.zip firefox
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1.12.0
         with:
