@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: 'latest'
-          path: '../latest'
+          path: 'latest'
       - name: Add & Commit
         uses: EndBug/add-and-commit@v9.1.1
         with:
