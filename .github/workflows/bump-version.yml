@@ -25,7 +25,7 @@ jobs:
         uses: cardinalby/webext-buildtools-chrome-crx-action@2.0.3
         with:
           # zip file made at the packExtensionDir step
-          zipFilePath: 'chrome-latest.zip'
+          zipFilePath: 'chrome-${{ steps.tag_version.outputs.new_tag }}.zip'
           crxFilePath: 'chrome-${{ steps.tag_version.outputs.new_tag }}.crx'
           privateKey: ${{ secrets.CHROME_CRX_PRIVATE_KEY }}
           # The following is optional if you need update.xml file
