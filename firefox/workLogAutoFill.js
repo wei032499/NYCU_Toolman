@@ -3,19 +3,25 @@ function initAutoFillForm() {
     if (ext_form.inited === true) return;
 
     document.querySelectorAll("#pno option").forEach((option) => {
-        try {
-            const now = new Date();
-            if (!(new Date(option.text.split(" ")[1].split("~")[0]).getTime() > new Date(now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()).getTime() ||
-                new Date(option.text.split(" ")[1].split("~")[1]).getTime() < new Date(now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()).getTime())) {
-                const opt = document.createElement('option');
-                opt.value = option.value;
-                opt.text = option.text;
-                document.querySelector("#ext_pno").appendChild(opt);
-            }
-        } catch (e) { }
-
+        const opt = document.createElement('option');
+        opt.value = option.value;
+        opt.text = option.text;
+        document.querySelector("#ext_pno").appendChild(opt);
     })
     ext_form.inited = true;
+
+    const workList = document.querySelectorAll("#ext_pno option");
+    const pos = { targ: document.querySelector("#ext_pno"), rel: "afterend" };
+    const compare = function (option) {
+        try {
+            const now = new Date();
+            return new Date(option.text.split(/[\s]+/)[1].split("~")[1]).getTime() < new Date(now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()).getTime();
+        } catch (e) { }
+
+        return false;
+    };
+
+    addExpiredBtn(workList, pos, compare);
 }
 
 
@@ -48,20 +54,20 @@ async function addRecords(pno, times) {
 
 
 
-function getDateList(startDate, endDate, day) {
-    const now = new Date();
-    const firstDateM = new Date(now.getFullYear() + "-" + (now.getMonth() + 1) + "-01");
+function getDateList(startDate, endDate, day, targetM) {
+    const firstDateM = new Date(targetM + "-01"); firstDateM.setHours(0);
     const firstDate = startDate.getTime() < firstDateM.getTime() ? firstDateM : startDate;
+    const now = new Date();
     const lastDate = endDate.getTime() < now.getTime() ? endDate : now;
 
     // const lastDayM = new Date(now.getFullYear(), (now.getMonth() + 1), 0);
     let diff = parseInt(day) - firstDate.getDay();
     if (diff < 0) diff += 7;
+    firstDate.setDate(firstDate.getDate() + diff)
 
     const dateList = [];
-    for (let i = firstDate.getDate() + diff; i <= lastDate.getDate(); i += 7) {
-        dateList.push(firstDate.getFullYear() + "-" + (firstDate.getMonth() + 1) + "-" + i.toString().padStart(2, '0'));
-    }
+    for (const date = new Date(firstDate); date.getTime() <= lastDate.getTime(); date.setDate(date.getDate() + 7))
+        dateList.push(date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, '0') + "-" + date.getDate().toString().padStart(2, '0'));
 
     return dateList;
 }
@@ -77,7 +83,6 @@ function addAutoFillForm() {
     const ext_pno = document.createElement("select");
     ext_pno.id = "ext_pno";
     ext_pno.required = true;
-    ext_pno.appendChild(document.createElement('option'));
 
     const ext_day = document.createElement("select");
     ext_day.id = "ext_day";
@@ -89,6 +94,15 @@ function addAutoFillForm() {
         opt.value = (i + 1) % 7;
         ext_day.appendChild(opt);
     }
+
+    const now = new Date();
+
+    const ext_targetM = document.createElement("input");
+    ext_targetM.id = "ext_targetM";
+    ext_targetM.required = true;
+    ext_targetM.type = "month";
+    ext_targetM.placeholder = "yyyy-mm"
+    ext_targetM.value = now.getFullYear() + "-" + (now.getMonth() + 1).toString().padStart(2, '0');
 
     const ext_startT = document.createElement("input");
     ext_startT.id = "ext_startT";
@@ -113,6 +127,7 @@ function addAutoFillForm() {
     ext_form.appendChild(document.createTextNode("每周"));
     ext_form.appendChild(ext_day);
     ext_form.appendChild(document.createTextNode("開始於"));
+    ext_form.appendChild(ext_targetM);
     ext_form.appendChild(ext_startT);
     ext_form.appendChild(document.createTextNode("持續"));
     ext_form.appendChild(ext_period);
@@ -126,11 +141,12 @@ function addAutoFillForm() {
         const [startDate, endDate] = projectText.split(/\s/)[1].split("~");
         const pno = pnoE.value;
         const day = document.getElementById("ext_day").value;
+        const targetM = document.getElementById("ext_targetM").value;
         const startT = document.getElementById("ext_startT").value;
         const startTS = startT.split(":");
         const period = document.getElementById("ext_period").value;
 
-        const dateList = getDateList(new Date(startDate), new Date(endDate), day);
+        const dateList = getDateList(new Date(startDate), new Date(endDate), day, targetM);
         const times = [];
         dateList.forEach(function (date) {
             const start = date + " " + startT;
