@@ -19,8 +19,9 @@ jobs:
           sed -i 's/"version":\s*".*"/"version": "${{ steps.tag_version.outputs.new_version }}"/g' firefox/manifest.json
       - name: Zip Folder
         run: |
-          zip -j -r chrome-${{ steps.tag_version.outputs.new_tag }}.zip chrome
-          zip -j -r firefox-${{ steps.tag_version.outputs.new_tag }}.zip firefox          
+          mkdir build
+          zip -j -r build/chrome-${{ steps.tag_version.outputs.new_tag }}.zip chrome
+          zip -j -r build/firefox-${{ steps.tag_version.outputs.new_tag }}.zip firefox          
       - name: Switch to 'latest' branch
         uses: actions/checkout@v3
         with:

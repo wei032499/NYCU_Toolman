@@ -1,0 +1,51 @@
+name: Push latest
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get Latest Tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: "true"
+      - name: Update version in manifest
+        run: |
+          sed -i 's/"version":\s*".*"/"version": "${{ steps.tag_version.outputs.previous_version }}"/g' chrome/manifest.json
+          sed -i 's/"version":\s*".*"/"version": "${{ steps.tag_version.outputs.previous_version }}"/g' firefox/manifest.json
+      - name: Zip extensions
+        run: |
+          mkdir build
+          zip -j -r build/chrome-${{ steps.tag_version.outputs.previous_tag }}.zip chrome
+          zip -j -r build/firefox-${{ steps.tag_version.outputs.previous_tag }}.zip firefox          
+      - name: Switch to 'latest' branch
+        uses: actions/checkout@v3
+        with:
+          ref: 'latest'
+          clean: 'false'
+      - name: Sign Chrome Extension crx file
+        uses: cardinalby/webext-buildtools-chrome-crx-action@2.0.3
+        with:
+          # zip file made at the packExtensionDir step
+          zipFilePath: 'build/chrome-${{ steps.tag_version.outputs.previous_tag }}.zip'
+          crxFilePath: 'build/chrome-${{ steps.tag_version.outputs.previous_tag }}.crx'
+          privateKey: ${{ secrets.CHROME_CRX_PRIVATE_KEY }}
+          # The following is optional if you need update.xml file
+          updateXmlPath: 'chrome_update.xml'
+          updateXmlCodebaseUrl: 'https://github.com/wei032499/NYCU_Toolman/releases/download/${{ steps.tag_version.outputs.previous_tag }}/chrome-${{ steps.tag_version.outputs.previous_tag }}.crx'
+      - name: Create firefox_update.json
+        run: |
+          echo '{"addons": {"{b898bf67-e0ae-41e9-aeb7-86630b67359c}": {"updates": [{"version": "${{ steps.tag_version.outputs.previous_version }}", "update_link": "https://github.com/wei032499/NYCU_Toolman/releases/download/${{ steps.tag_version.outputs.previous_tag }}/firefox-${{ steps.tag_version.outputs.previous_tag }}.xpi"}]}}}' > firefox_update.json
+      - name: Copy to latest
+        run: |
+          cp build/chrome-${{ steps.tag_version.outputs.previous_tag }}.zip chrome-latest.zip
+          cp build/firefox-${{ steps.tag_version.outputs.previous_tag }}.zip firefox-latest.zip
+      - name: Add & Commit
+        uses: EndBug/add-and-commit@v9.1.1
+        with:
+          add: 'chrome-latest.zip firefox-latest.zip chrome_update.xml firefox_update.json --force'
