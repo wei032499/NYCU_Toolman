@@ -55,15 +55,12 @@ async function addRecords(pno, times) {
 
 
 function getDateList(startDate, endDate, day, targetM) {
-    const firstDateM = new Date(targetM + "-01"); firstDateM.setHours(0);
+    const firstDateM = new Date(targetM + "-01");
     const firstDate = startDate.getTime() < firstDateM.getTime() ? firstDateM : startDate;
     const now = new Date();
-    const lastDate = endDate.getTime() < now.getTime() ? endDate : now;
+    const lastDate = endDate.getTime() < now.getTime() ? endDate : new Date(now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate());
 
-    // const lastDayM = new Date(now.getFullYear(), (now.getMonth() + 1), 0);
-    let diff = parseInt(day) - firstDate.getDay();
-    if (diff < 0) diff += 7;
-    firstDate.setDate(firstDate.getDate() + diff)
+    firstDate.setDate(firstDate.getDate() + (parseInt(day) - firstDate.getDay() + 7) % 7);
 
     const dateList = [];
     for (const date = new Date(firstDate); date.getTime() <= lastDate.getTime(); date.setDate(date.getDate() + 7))
