@@ -28,8 +28,8 @@ jobs:
         uses: cardinalby/webext-buildtools-chrome-crx-action@2.0.3
         with:
           # zip file made at the packExtensionDir step
-          zipFilePath: 'chrome-latest.zip'
-          crxFilePath: 'chrome-${{ steps.tag_version.outputs.new_tag }}.crx'
+          zipFilePath: 'build/chrome-${{ steps.tag_version.outputs.new_tag }}.zip'
+          crxFilePath: 'build/chrome-${{ steps.tag_version.outputs.new_tag }}.crx'
           privateKey: ${{ secrets.CHROME_CRX_PRIVATE_KEY }}
           # The following is optional if you need update.xml file
           updateXmlPath: 'chrome_update.xml'
@@ -40,16 +40,13 @@ jobs:
       - name: Sign Firefox xpi file
         uses: cardinalby/webext-buildtools-firefox-sign-xpi-action@1.0.6
         with:
-          zipFilePath: 'firefox-${{ steps.tag_version.outputs.new_tag }}.zip'
-          xpiFilePath: 'firefox-${{ steps.tag_version.outputs.new_tag }}.xpi'
+          zipFilePath: 'build/firefox-${{ steps.tag_version.outputs.new_tag }}.zip'
+          xpiFilePath: 'build/firefox-${{ steps.tag_version.outputs.new_tag }}.xpi'
           extensionId: '{b898bf67-e0ae-41e9-aeb7-86630b67359c}'
           channel: 'unlisted'
           timeoutMs: 600000
           jwtIssuer: ${{ secrets.FF_JWT_ISSUER }}
           jwtSecret: ${{ secrets.FF_JWT_SECRET }}
-      - run: |
-          cp chrome-${{ steps.tag_version.outputs.new_tag }}.zip chrome-latest.zip
-          cp firefox-${{ steps.tag_version.outputs.new_tag }}.xpi firefox-latest.xpi
       - name: Add & Commit
         uses: EndBug/add-and-commit@v9.1.1
         with:
@@ -60,4 +57,4 @@ jobs:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
-          artifacts: "chrome-${{ steps.tag_version.outputs.new_tag }}.zip,firefox-${{ steps.tag_version.outputs.new_tag }}.zip,chrome-${{ steps.tag_version.outputs.new_tag }}.crx,firefox-${{ steps.tag_version.outputs.new_tag }}.xpi"
+          artifacts: "build/chrome-${{ steps.tag_version.outputs.new_tag }}.zip,build/firefox-${{ steps.tag_version.outputs.new_tag }}.zip,build/chrome-${{ steps.tag_version.outputs.new_tag }}.crx,build/firefox-${{ steps.tag_version.outputs.new_tag }}.xpi"
