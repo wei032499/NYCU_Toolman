@@ -9,6 +9,9 @@
             "update_url": "https://github.com/wei032499/NYCU_Toolman/releases/latest/download/firefox_update.json"
         }
     },
+    "action": {
+        "browser_style": true
+    },
     "permissions": [
         "webRequest",
         "webRequestBlocking",

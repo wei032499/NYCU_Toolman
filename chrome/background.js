@@ -1,3 +1,9 @@
+chrome.action.onClicked.addListener((tab) => {
+    chrome.tabs.create({
+        url: 'https://pt-attendance.nycu.edu.tw/index.php'
+    });
+});
+
 function blockWorkDetailPage(tabId) {
     chrome.declarativeNetRequest.updateSessionRules({
         addRules: [{

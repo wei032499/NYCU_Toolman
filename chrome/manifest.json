@@ -9,6 +9,7 @@
         "declarativeNetRequest",
         "scripting"
     ],
+    "action": {},
     "host_permissions": [
         "https://pt-attendance.nycu.edu.tw/"
     ],
