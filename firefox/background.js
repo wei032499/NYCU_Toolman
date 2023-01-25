@@ -1,3 +1,8 @@
+browser.action.onClicked.addListener((tab) => {
+    browser.tabs.create({
+        url: 'https://pt-attendance.nycu.edu.tw/index.php'
+    });
+});
 
 function blockWorkDetailPageListener() {
     return { cancel: true };
