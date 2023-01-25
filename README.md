@@ -9,16 +9,12 @@
 
 ### Firefox
 
-由於目前 Firefox 正式版( Firefox 108 )尚未正式支援 Manifest V3，因此需手動調整設定並進行安裝。
-[參考連結](https://extensionworkshop.com/documentation/develop/manifest-v3-migration-guide/#turn-on-the-developer-preview)
-
 **詳細步驟如下：**
 
-1. 啟用 Manifest V3：於網址列輸入 `about:config` 進入設定頁面，將 `extensions.manifestV3.enabled` 設置為 `true`。
-2. 安裝套件：下載此套件安裝檔案，雙擊以 Firefox 執行完成安裝。檔案連結：
+1. 安裝套件：下載此套件安裝檔案，雙擊以 Firefox 執行完成安裝。檔案連結：
 [右鍵另存檔案](https://github.com/wei032499/NYCU_Toolman/raw/latest/firefox-latest.xpi)
-3. 啟動權限：安裝完成後，於網址列輸入 `about:addons` 進入擴充套件管理頁面，點擊 `打工人 NYCU Toolman` 進入套件設定頁並切換到【權限】頁籤，開啟功能權限。
-4. 登入[兼任差勤及服務管理系統](https://pt-attendance.nycu.edu.tw/index.php)即可開始使用。
+2. 啟動權限：進入[兼任差勤及服務管理系統](https://pt-attendance.nycu.edu.tw/index.php)後，於上方工具列右鍵點選套件圖示並點擊允許權限 _(或 安裝完成後，於網址列輸入 `about:addons` 進入擴充套件管理頁面，點擊 `打工人 NYCU Toolman` 進入套件設定頁並切換到【權限】頁籤，開啟功能權限)_。
+3. 登入[兼任差勤及服務管理系統](https://pt-attendance.nycu.edu.tw/index.php) _(或點擊工具列套件圖示)_ 即可開始使用。
 
 ### Chrome
 
