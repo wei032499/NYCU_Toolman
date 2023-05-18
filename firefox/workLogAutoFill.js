@@ -30,8 +30,7 @@ async function addRecords(pno, times) {
     await browser.runtime.sendMessage({ func: "blockWorkDetailPage" });
 
     for (let i = 0; i < times.length; i++) {
-        // await new Promise(r => setTimeout(r, 300));
-        const pnoE = document.querySelector("#pno");
+        const pnoE = document.querySelector("select[name='workP']");
         const workSE = document.querySelector("input[name='workS']");
         const workEE = document.querySelector("input[name='workE']");
         const submitE = document.querySelector("input[name='btnSubmit']");
@@ -40,9 +39,10 @@ async function addRecords(pno, times) {
         workSE.value = times[i][0];
         workEE.value = times[i][1];
         pnoE.dispatchEvent(new Event("change"));
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(r => setTimeout(r, 500));
         submitE.disabled = false;
         submitE.click();
+        await new Promise(r => setTimeout(r, 500));
     }
 
 
